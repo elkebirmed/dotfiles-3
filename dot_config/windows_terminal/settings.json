@@ -1,0 +1,162 @@
+// -*-mode:javascript-*- vim:ft=json
+// %APPDATA%/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/profiles.json
+// ============================================================================
+// Windows Terminal configuration file.
+//
+// On Windows, this file will be copied over to
+// `$env:LocalAppData\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\profiles.json`
+// after `chezmoi apply` by the script `../run_windows_terminal.bat.tmpl`.
+//
+// To view the default settings, hold "alt" while clicking on the "Settings" button.
+// See https://aka.ms/terminal-documentation
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    // Set default profile used when Windows Terminal is started.
+    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "copyFormatting": "none",
+    "theme": "dark",
+    "copyOnSelect": false,
+    "language": "en-US",
+    "launchMode": "default",
+    // Setup list of available shells.
+    "profiles": {
+        // Define shared values for the profiles below.
+        "defaults": {
+            "useAcrylic": true,
+            "cursorShape": "bar",
+            "cursorColor": "#f81ce5",
+            "opacity": 90,
+            "backgroundImageOpacity": 0.1,
+            "backgroundImageStretchMode": "none",
+            "backgroundImageAlignment": "topRight",
+            "colorScheme": "OneDark",
+            "elevate": false,
+            "font": {
+                "face": "Fira Code NF",
+                "size": 12
+            }
+        },
+        // Setup list of available shells.
+        "list": [
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "elevate": false,
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Invite de commandes"
+            },
+            {
+                "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+                "hidden": false,
+                "name": "Ubuntu",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{12dfee7f-c2d8-5760-b281-f25639efdb28}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{e5fc2784-0b4a-5ff4-affb-f3445749555d}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "name": "PowerShell",
+                "source": "Windows.Terminal.PowershellCore",
+                "backgroundImage": "https://upload.wikimedia.org/wikipedia/commons/a/af/PowerShell_Core_6.0_icon.png"
+            },
+            {
+                "guid": "{00000000-0000-0000-ba54-000000000002}",
+                "hidden": false,
+                "name": "Bash (git)",
+                "commandline": "\"%PROGRAMFILES%\\git\\usr\\bin\\bash.exe\" -i -l",
+                "backgroundImage": "https://raw.githubusercontent.com/odb/official-bash-logo/master/assets/Logos/Icons/PNG/256x256_white.png",
+                "icon": "%PROGRAMFILES%\\Git\\mingw64\\share\\git\\git-for-windows.ico",
+                "startingDirectory": "%USERPROFILE%"
+            },
+            {
+                "guid": "{00000000-0000-0000-ba54-000000000001}",
+                "hidden": true,
+                "name": "Bash (scoop)",
+                "commandline": "\"%UserProfile%\\scoop\\apps\\git\\current\\usr\\bin\\bash.exe\" -i -l",
+                "backgroundImage": "https://raw.githubusercontent.com/odb/official-bash-logo/master/assets/Logos/Icons/PNG/256x256.png",
+                "icon": "ms-appx:///ProfileIcons/{0caa0dad-35be-5f56-a8ff-afceeeaa6101}.png",
+                "startingDirectory": "%USERPROFILE%"
+            }
+        ]
+    },
+    // Setup initial window size.
+    "initialCols": 120,
+    "initialRows": 35,
+    // Add custom color schemes to this array.
+    "schemes": [
+        {
+            "background": "#1E2127",
+            "black": "#1E2127",
+            "blue": "#61AFEF",
+            "brightBlack": "#5C6370",
+            "brightBlue": "#61AFEF",
+            "brightCyan": "#56B6C2",
+            "brightGreen": "#98C379",
+            "brightPurple": "#C678DD",
+            "brightRed": "#E06C75",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#D19A66",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#56B6C2",
+            "foreground": "#ABB2BF",
+            "green": "#98C379",
+            "name": "OneDark",
+            "purple": "#C678DD",
+            "red": "#E06C75",
+            "selectionBackground": "#FFFFFF",
+            "white": "#ABB2BF",
+            "yellow": "#D19A66"
+        }
+    ],
+    // Add any keybinding overrides to this array.
+    // To unbind a default keybinding, set the command to "unbound"
+    "actions": [
+        {
+            "command": {
+                "action": "copy",
+                "singleLine": false
+            },
+            "keys": "ctrl+c"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "command": {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "keys": "alt+shift+d"
+        }
+    ]
+}

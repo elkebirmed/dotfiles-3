@@ -1,0 +1,134 @@
+# -*-mode:powershell-*- vim:ft=powershell
+
+# ~/.config/powershell/profile.ps1
+# =============================================================================
+# Executed when PowerShell starts.
+#
+# On Windows, this file will be copied over to these locations after
+# running `chezmoi apply` by the script `../../run_powershell.bat.tmpl`:
+#     - %USERPROFILE%\Documents\PowerShell
+#     - %USERPROFILE%\Documents\WindowsPowerShell
+#
+# See https://docs.microsoft.com/en/powershell/module/microsoft.powershell.core/about/about_profiles
+
+$ColorInfo = "DarkYellow"
+$ColorWarn = "DarkRed"
+
+
+# Imports
+# -----------------------------------------------------------------------------
+
+# Setup a pretty development-oriented PowerShell prompt.
+$modules = (
+    "posh-git",
+    "oh-my-posh",
+    "Terminal-Icons",
+    "FastPing"
+)
+$modules | ForEach-Object {
+    if (Get-Module -ListAvailable -Name $_) {
+        Import-Module $_
+    }
+}
+if (Get-Module -ListAvailable -Name "oh-my-posh") {
+    oh-my-posh init pwsh --config ~/.config/oh-my-posh/theme.omp.json | Invoke-Expression
+}
+
+if (Get-Module -ListAvailable -Name "PSReadLine") {
+    Set-PSReadLineOption -EditMode Emacs
+    Set-PSReadLineOption -BellStyle None
+    Set-PSReadLineKeyHandler -Chord 'Ctrl+d' -Function DeleteChar
+    Set-PSReadLineOption -PredictionSource History
+    Set-PSReadLineOption -PredictionViewStyle ListView
+
+    if (Get-Module -ListAvailable -Name "PSFzf") {
+        Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+f' -PSReadlineChordReverseHistory 'Ctrl+r'
+    }
+}
+
+# Import popular commands from Linux.
+if (Get-Command Import-WslCommand -errorAction Ignore) {
+    $WslCommands = @(
+        "chmod",
+        "grep",
+        "head",
+        "less",
+        "ls",
+        "man",
+        "ssh",
+        "tail",
+        "touch"
+    )
+    $WslImportedCommands = @()
+    $WslDefaultParameterValues = @{
+        grep = "-E";
+        less = "-i";
+        ls   = "-AFhl --color=auto"
+    }
+
+    $WslCommands | ForEach-Object {
+        if (! (Get-Command $_ -errorAction Ignore)) {
+            wsl command -v $_ > null
+            if ($?) {
+                $WslImportedCommands += $_
+                Import-WslCommand "$_"
+            }
+            else {
+                $Global:Error.RemoveAt($Global:Error.Count - 1)
+            }
+        }
+    }
+}
+
+
+# Includes
+# -----------------------------------------------------------------------------
+
+# Determine user profile parent directory.
+$ProfilePath = Split-Path -parent $profile
+
+# Load functions declarations from separate configuration file.
+if (Test-Path $ProfilePath/functions.ps1) {
+    . $ProfilePath/functions.ps1
+}
+
+# Add missing user paths.
+if (Get-Command Add-EnvPath -errorAction Ignore) {
+    if ($IsWindows) {
+        Add-EnvPath -Path "${Env:Programfiles}\Git\cmd\" -Position "Append"
+    }
+    else {
+        Add-EnvPath -Path "/usr/local/sbin" -Position "Prepend"
+        Add-EnvPath -Path "/usr/local/bin" -Position "Prepend"
+    }
+}
+
+# Load alias definitions from separate configuration file.
+if (Test-Path $ProfilePath/aliases.ps1) {
+    . $ProfilePath/aliases.ps1
+}
+
+# Load custom code from separate configuration file.
+if (Test-Path $ProfilePath/extras.ps1) {
+    . $ProfilePath/extras.ps1
+}
+
+
+# Varia
+# -----------------------------------------------------------------------------
+
+# Point ripgrep to its configuration file.
+# See https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md
+$Env:RIPGREP_CONFIG_PATH = "$HOME/.ripgreprc"
+
+
+# Finalization
+# -----------------------------------------------------------------------------
+
+
+
+# Display if/which WSL Interop commands are imported.
+if ($WslImportedCommands) {
+    Write-Host "Windows Subsystem for Linux (WSL) Interop enable." -ForegroundColor $ColorInfo
+    Write-Host "WSL commands available:`n`t$($WslImportedCommands | Sort-Object)" -ForegroundColor $ColorInfo
+}

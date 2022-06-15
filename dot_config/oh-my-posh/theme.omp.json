@@ -1,0 +1,84 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "osc99": true,
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "foreground": "cyan",
+          "style": "powerline",
+          "template": "{{ if .WSL }}WSL at {{ end }}{{.Icon}}",
+          "type": "os"
+        },
+        {
+          "foreground": "cyan",
+          "properties": {
+            "style": "full"
+          },
+          "style": "plain",
+          "template": " {{ .Path }} ",
+          "type": "path"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "right",
+      "segments": [
+        {
+          "foreground": "red",
+          "style": "plain",
+          "template": "root ",
+          "type": "root"
+        },
+        {
+          "foreground": "#F1502F",
+          "properties": {
+            "fetch_status": true
+          },
+          "style": "plain",
+          "template": "{{ .HEAD }}{{ .BranchStatus }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }} ",
+          "type": "git"
+        },
+        {
+          "type": "project",
+          "style": "plain",
+          "foreground": "#ffeb3b",
+          "template": " {{ if .Error }}{{ .Error }}{{ else }}{{ if .Version }}\uf487 {{.Version}}{{ end }}{{ end }} "
+        },
+        {
+          "foreground": "#94ffa2",
+          "style": "plain",
+          "template": "| {{ round .PhysicalPercentUsed .Precision }}% ",
+          "type": "sysinfo"
+        },
+        {
+          "foreground": "#81ff91",
+          "style": "plain",
+          "template": "| {{ (div ((sub .PhysicalTotalMemory .PhysicalFreeMemory)|float64) 1000000000.0) }}/{{ (div .PhysicalTotalMemory 1000000000.0) }}G",
+          "type": "sysinfo"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "lightGreen",
+          "foreground_templates": ["{{ if gt .Code 0 }}red{{ end }}"],
+          "properties": {
+            "always_enabled": true
+          },
+          "style": "powerline",
+          "template": "\u279c ",
+          "type": "exit"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "version": 2
+}
