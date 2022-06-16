@@ -49,7 +49,7 @@ setup_prompts() {
 
     # Install Bash-it
     PACKAGE_NAME='Bash-it'
-    if [ ! -d "$HOME/.bash-it" ]; then
+    if [ ! -d ~/.bash-it ]; then
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
         ~/.bash_it/install.sh --silent --no-modify-config
