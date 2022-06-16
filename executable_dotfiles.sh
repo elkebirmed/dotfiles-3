@@ -51,32 +51,32 @@ if ! is_directory ~/.oh-my-zsh; then
 fi
 
 # ZSH autosuggestions
-if ! is_directory "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"; then
+if ! is_directory ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions; then
     info "[Prompt] Install Zsh-autosuggestions plugin"
-    git clone --quiet --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git clone --quiet --depth=1 https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 else
     info "[Prompt] Update Zsh-autosuggestions plugin"
-    cd "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+    cd ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
     git pull --quiet
 fi
 
 # ZSH syntax highlighting
-if ! is_directory "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"; then
+if ! is_directory ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting; then
     info "[Prompt] Install Zsh-syntax-highlighting plugin"
-    git clone --quiet --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone --quiet --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 else
     info "[Prompt] Update Zsh-syntax-highlighting plugin"
-    cd "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+    cd ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
     git pull --quiet
 fi
 
 # Powerlevel10k
-if ! is_directory "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k"; then
+if ! is_directory ~/.oh-my-zsh/custom/themes/powerlevel10k; then
     info "[Prompt] Install Powerlevel10k theme"
-    git clone --quiet --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+    git clone --quiet --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
 else
     info "[Prompt] Update Powerlevel10k theme"
-    cd "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k"
+    cd ~/.oh-my-zsh/custom/themes/powerlevel10k
     git pull --quiet
 fi
 
