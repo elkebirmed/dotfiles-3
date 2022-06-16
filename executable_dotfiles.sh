@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # -*-mode:sh-*- vim:ft=shell-script
 
 # ~/dotfiles.sh
@@ -63,33 +63,33 @@ setup_prompts() {
 
     # Install Bash-it
     PACKAGE_NAME='Bash-it'
-    if [ ! -d "$HOME/.bash_it" ]; then
+    if [[ ! -d "$HOME/.bash_it" ]]; then
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
         ~/.bash_it/install.sh --silent --no-modify-config
     fi
 
     # Install Oh My Zsh
-    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
         PACKAGE_NAME='Oh My Zsh'
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     fi
 
     # Install Zsh plugins
-    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]]; then
         PACKAGE_NAME='zsh-autosuggestions'
         printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     fi
 
-    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
+    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]]; then
         PACKAGE_NAME='zsh-syntax-highlighting'
         printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
     fi
 
-    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k" ]]; then
         PACKAGE_NAME='Powerlevel10k'
         printf -- "%sInstalling/updating Zsh theme: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -100,7 +100,7 @@ setup_applications() {
     printf -- "\n%sSetting up CLI applications:%s\n\n" "$BOLD" "$RESET"
 
     # Install Ultimate Vim Configuration
-    if [ ! -d "${HOME}/.vim_runtime" ]; then
+    if [[ ! -d "${HOME}/.vim_runtime" ]]; then
         PACKAGE_NAME='Ultimate vimrc'
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/amix/vimrc.git ${HOME}/.vim_runtime
@@ -133,12 +133,12 @@ setup_devtools() {
     printf -- "%sInstalling/updating Node Version Manager...%s\n" "$BLUE" "$RESET"
     export NVM_DIR="$HOME/.nvm" && (
         NVM_NEW=false
-        if [ ! -d "$NVM_DIR" ]; then
+        if [[ ! -d "$NVM_DIR" ]]; then
             git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
             NVM_NEW=true
         fi
         cd "$NVM_DIR"
-        if [ ! $NVM_NEW ]; then
+        if [[ ! $NVM_NEW ]]; then
             git fetch --tags origin
         fi
         HASH=$(git describe --abbrev=0 --tags --match "v[0-9]*" "$(git rev-list --tags --max-count=1)")
@@ -170,7 +170,7 @@ main() {
     finalize_dotfiles
 
     # Check if user shell is not zsh
-    if [ "$SHELL" != "/bin/zsh" ]; then
+    if [[ "$SHELL" != "/bin/zsh" ]]; then
         printf -- "%sChanging shell to zsh...%s\n" "$BLUE" "$RESET"
         chsh -s $(which zsh)
     fi
