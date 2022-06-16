@@ -34,20 +34,6 @@ setup_color() {
     fi
 }
 
-import_repo() {
-    repo=$1
-    destination=$2
-    if uname | grep -Eq '^(cygwin|mingw|msys)'; then
-        uuid=$(powershell -NoProfile -Command "[guid]::NewGuid().ToString()")
-    else
-        uuid=$(uuidgen)
-    fi
-    TMPFILE=$(mktemp /tmp/dotfiles."${uuid}".tar.gz) || exit 1
-    curl -s -L -o "$TMPFILE" "$repo" || exit 1
-    chezmoi import --strip-components 1 --destination "$destination" "$TMPFILE" || exit 1
-    rm -f "$TMPFILE"
-}
-
 setup_dependencies() {
     printf -- "\n%sSetting up dependencies:%s\n\n" "$BOLD" "$RESET"
 
@@ -64,34 +50,20 @@ setup_prompts() {
     # Install Oh My Zsh
     PACKAGE_NAME='Oh My Zsh'
     printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    CHEZMOIPATH=$(chezmoi source-path)
-    rm -rf "$CHEZMOIPATH"/dot_oh-my-zsh/plugins
-    import_repo 'https://github.com/robbyrussell/oh-my-zsh/archive/master.tar.gz' "${HOME}/.oh-my-zsh" || {
-        error "import of ${PACKAGE_NAME} failed"
-        exit 1
-    }
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
     # Install Zsh plugins
     PACKAGE_NAME='zsh-autosuggestions'
     printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    import_repo 'https://github.com/zsh-users/zsh-autosuggestions/archive/master.tar.gz' "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" || {
-        error "import of ${PACKAGE_NAME} failed"
-        exit 1
-    }
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
     PACKAGE_NAME='zsh-syntax-highlighting'
     printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    import_repo 'https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz' "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" || {
-        error "import of ${PACKAGE_NAME} failed"
-        exit 1
-    }
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
     PACKAGE_NAME='Powerlevel10k'
     printf -- "%sInstalling/updating Zsh theme: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    import_repo 'https://github.com/romkatv/powerlevel10k/archive/master.tar.gz' "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" || {
-        error "import of ${PACKAGE_NAME} failed"
-        exit 1
-    }
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 }
 
 setup_applications() {
