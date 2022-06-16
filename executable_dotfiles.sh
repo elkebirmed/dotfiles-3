@@ -111,4 +111,7 @@ nvm install node
 info "[Dotfiles] Apply dotfiles"
 chezmoi apply
 
+# Return home
+cd ~
+
 info "Done ✔️"
