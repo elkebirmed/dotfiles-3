@@ -89,6 +89,12 @@ if ! is_installed nvm; then
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
+# Ultimate Vim configuration
+if ! is_directory ~/.vim; then
+    info "[Vim] Install Ultimate Vim configuration"
+    git clone --quiet --depth=1 https://github.com/amix/vimrc.git ~/.vim
+    ln -s ~/.vim/vimrc ~/.vimrc
+fi
 
 # TODO: Install Yarn, Docker, etc.
 
