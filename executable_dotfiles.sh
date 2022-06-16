@@ -7,6 +7,19 @@
 
 set -e
 
+info() {
+	printf "\033[36m%s\033[0m\n" "$*" >&2
+}
+
+warn() {
+	printf "\033[33mWarning: %s\033[0m\n" "$*" >&2
+}
+
+error() {
+	printf "\033[31mError: %s\033[0m\n" "$*" >&2
+	exit 1
+}
+
 command_exists() {
     command -v "$@" >/dev/null 2>&1
 }
@@ -37,11 +50,12 @@ setup_color() {
 setup_dependencies() {
     printf -- "\n%sSetting up dependencies:%s\n\n" "$BOLD" "$RESET"
 
-    # Install Homebrew packages
-    if command -v brew > /dev/null; then
-        printf -- "%sInstalling/updating apps using Homebrew...%s\n" "$BLUE" "$RESET"
-        brew bundle --global
-    fi
+    sudo apt update && sudo apt upgrade -y
+   
+    sudo apt install -y \
+        git \
+        vim \
+        zsh
 }
 
 setup_prompts() {
@@ -49,33 +63,33 @@ setup_prompts() {
 
     # Install Bash-it
     PACKAGE_NAME='Bash-it'
-    if [[ ! -d "$HOME/.bash_it" ]]; then
+    if [ ! -d "$HOME/.bash_it" ]; then
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
         ~/.bash_it/install.sh --silent --no-modify-config
     fi
 
     # Install Oh My Zsh
-    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
         PACKAGE_NAME='Oh My Zsh'
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     fi
 
     # Install Zsh plugins
-    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]]; then
+    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
         PACKAGE_NAME='zsh-autosuggestions'
         printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     fi
 
-    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]]; then
+    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
         PACKAGE_NAME='zsh-syntax-highlighting'
         printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
     fi
 
-    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k" ]]; then
+    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
         PACKAGE_NAME='Powerlevel10k'
         printf -- "%sInstalling/updating Zsh theme: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -85,54 +99,35 @@ setup_prompts() {
 setup_applications() {
     printf -- "\n%sSetting up CLI applications:%s\n\n" "$BOLD" "$RESET"
 
-    # Install Nano syntax highlighting files
-    # PACKAGE_NAME='Nano syntax highlighting'
-    # CHEZMOIPATH=$(chezmoi source-path)
-    # rm -rf "$CHEZMOIPATH"/dot_nano/nanorc
-    # printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    # import_repo 'https://github.com/scopatz/nanorc/archive/master.tar.gz' "${HOME}/.nano" || {
-    #     error "import of ${PACKAGE_NAME} failed"
-    #     exit 1
-    # }
-
     # Install Ultimate Vim Configuration
-    # PACKAGE_NAME='Ultimate vimrc'
-    # printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    # import_repo 'https://github.com/amix/vimrc/archive/master.tar.gz' "${HOME}/.vim_runtime" || {
-    #     error "import of ${PACKAGE_NAME} failed"
-    #     exit 1
-    # }
-
-    # Install micro plugins
-    if command -v micro; then
-        printf -- "%sInstalling/updating micro plugins...%s\n" "$BLUE" "$RESET"
-        OUT_OF_DATE='installed but out-of-date'
-        if  micro -plugin install filemanager | tee -a /dev/tty | grep -q "$OUT_OF_DATE"; then
-            micro -plugin update  filemanager
-        fi
-        if  micro -plugin install manipulator | tee -a /dev/tty | grep -q "$OUT_OF_DATE"; then
-            micro -plugin update  manipulator
-        fi
-        if  micro -plugin install misspell | tee -a /dev/tty | grep -q "$OUT_OF_DATE"; then
-            micro -plugin update  misspell
-        fi
-        if  micro -plugin install misspell | tee -a /dev/tty | grep -q "$OUT_OF_DATE"; then
-            micro -plugin update  misspell
-        fi
-        if  micro -plugin install wc | tee -a /dev/tty | grep -q "$OUT_OF_DATE"; then
-            micro -plugin update  wc
-        fi
+    if [ ! -d "${HOME}/.vim_runtime" ]; then
+        PACKAGE_NAME='Ultimate vimrc'
+        printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+        git clone --depth=1 https://github.com/amix/vimrc.git ${HOME}/.vim_runtime
     fi
+
+    # Install FZF
+    FZF_DIR="${HOME}/.fzf"
+    if command_exists fzf; then
+		info "[fzf] Already installed. Updating..."
+		(
+			cd "${FZF_DIR}"
+			git pull --quiet
+			./install --bin
+		)
+		return
+	fi
+
+	info "[fzf] Install"
+	if [[ ! -d "${FZF_DIR}" ]]; then
+		git clone --quiet --depth 1 https://github.com/junegunn/fzf.git "${FZF_DIR}"
+		"${FZF_DIR}/install" --no-bash --no-fish --key-bindings --completion --no-update-rc
+	fi
 }
 
 # shellcheck source=/dev/null
 setup_devtools() {
     printf -- "\n%sSetting up development tools:%s\n\n" "$BOLD" "$RESET"
-
-    command_exists git || {
-        error "git is not installed"
-        exit 1
-    }
 
     # Install NVM
     printf -- "%sInstalling/updating Node Version Manager...%s\n" "$BLUE" "$RESET"
@@ -165,17 +160,7 @@ finalize_dotfiles() {
 main() {
     printf -- "\n%sDotfiles setup script%s\n" "$BOLD" "$RESET"
 
-    command_exists chezmoi || {
-        error "chezmoi is not installed"
-        exit 1
-    }
-
-    sudo apt update && sudo apt upgrade -y
-    sudo apt install -y \
-        git \
-        vim \
-        neovim \
-        zsh
+    command_exists chezmoi || sh -c "$(curl -fsLS chezmoi.io/get)"
 
     setup_dependencies
     setup_color
@@ -191,12 +176,6 @@ main() {
     fi
 
     printf -- "\n%sDone.%s\n\n" "$GREEN" "$RESET"
-
-    # if [ -n "`$SHELL -c 'echo $ZSH_VERSION'`" ]; then
-    #    [ -s "$HOME/.zshrc" ] && \. "$HOME/.zshrc"
-    # elif [ -n "`$SHELL -c 'echo $BASH_VERSION'`" ]; then
-    #    [ -s "$HOME/.bashrc" ] && \. "$HOME/.bashrc"
-    # fi
 }
 
 main "$@"
