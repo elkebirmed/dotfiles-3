@@ -1,0 +1,37 @@
+# -*-mode:toml-*- vim:ft=toml
+
+# ~/.config/starship.toml
+# =============================================================================
+# Starship cross-shell prompt configuration file.
+#
+# See https://starship.rs/
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+scan_timeout = 10
+
+add_newline = true
+
+[battery]
+disabled = true
+
+[character]
+error_symbol = "[✘](bold red) "
+
+[directory]
+truncation_length = 3
+truncate_to_repo = false
+truncation_symbol = "»/"
+
+[python]
+pyenv_version_name = true
+
+[memory_usage]
+disabled = false
+threshold = 75
+format = "via $symbol [${ram}]($style) "
+symbol = "💻 "
+style = "bold dimmed green"
+
+[cmd_duration]
+format = "🕒 [$duration](bold yellow)"
