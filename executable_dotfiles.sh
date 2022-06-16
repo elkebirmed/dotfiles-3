@@ -47,45 +47,61 @@ setup_dependencies() {
 setup_prompts() {
     printf -- "\n%sSetting up shell frameworks:%s\n\n" "$BOLD" "$RESET"
 
+    # Install Bash-it
+    PACKAGE_NAME='Bash-it'
+    if [ ! -d "$HOME/.bash-it" ]; then
+        printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+        git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+        ~/.bash_it/install.sh --silent --no-modify-config
+    fi
+
     # Install Oh My Zsh
-    PACKAGE_NAME='Oh My Zsh'
-    printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        PACKAGE_NAME='Oh My Zsh'
+        printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    fi
 
     # Install Zsh plugins
-    PACKAGE_NAME='zsh-autosuggestions'
-    printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+        PACKAGE_NAME='zsh-autosuggestions'
+        printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    fi
 
-    PACKAGE_NAME='zsh-syntax-highlighting'
-    printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
+        PACKAGE_NAME='zsh-syntax-highlighting'
+        printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    fi
 
-    PACKAGE_NAME='Powerlevel10k'
-    printf -- "%sInstalling/updating Zsh theme: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    if [ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+        PACKAGE_NAME='Powerlevel10k'
+        printf -- "%sInstalling/updating Zsh theme: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    fi
 }
 
 setup_applications() {
     printf -- "\n%sSetting up CLI applications:%s\n\n" "$BOLD" "$RESET"
 
     # Install Nano syntax highlighting files
-    PACKAGE_NAME='Nano syntax highlighting'
-    CHEZMOIPATH=$(chezmoi source-path)
-    rm -rf "$CHEZMOIPATH"/dot_nano/nanorc
-    printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    import_repo 'https://github.com/scopatz/nanorc/archive/master.tar.gz' "${HOME}/.nano" || {
-        error "import of ${PACKAGE_NAME} failed"
-        exit 1
-    }
+    # PACKAGE_NAME='Nano syntax highlighting'
+    # CHEZMOIPATH=$(chezmoi source-path)
+    # rm -rf "$CHEZMOIPATH"/dot_nano/nanorc
+    # printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+    # import_repo 'https://github.com/scopatz/nanorc/archive/master.tar.gz' "${HOME}/.nano" || {
+    #     error "import of ${PACKAGE_NAME} failed"
+    #     exit 1
+    # }
 
     # Install Ultimate Vim Configuration
-    PACKAGE_NAME='Ultimate vimrc'
-    printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    import_repo 'https://github.com/amix/vimrc/archive/master.tar.gz' "${HOME}/.vim_runtime" || {
-        error "import of ${PACKAGE_NAME} failed"
-        exit 1
-    }
+    # PACKAGE_NAME='Ultimate vimrc'
+    # printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+    # import_repo 'https://github.com/amix/vimrc/archive/master.tar.gz' "${HOME}/.vim_runtime" || {
+    #     error "import of ${PACKAGE_NAME} failed"
+    #     exit 1
+    # }
 
     # Install micro plugins
     if command -v micro; then
@@ -196,7 +212,11 @@ main() {
         neovim \
         zsh
     
-    chsh -s $(which zsh)
+    # Check if user shell is not zsh
+    if [ "$SHELL" != "/bin/zsh" ]; then
+        printf -- "%sChanging shell to zsh...%s\n" "$BLUE" "$RESET"
+        chsh -s $(which zsh)
+    fi
 
     setup_dependencies
     setup_color
