@@ -88,21 +88,17 @@ fi
 
 # TODO: Install Yarn, Docker, etc.
 
-# Chezmoi
-if ! is_installed chezmoi; then
-    info "[Chezmoi] Install"
-    sh -c "$(curl -fsLS chezmoi.io/get)"
-fi
-
 # Change shell to zsh
 if ! [[ $(echo $SHELL) == *"zsh"* ]]; then
     info "[ZSH] Change shell to zsh"
     chsh -s "$(which zsh)"
 fi
 
+# reload shell
+exec "$(which zsh)" -l
+
 # Install development tools
 info "[Devtools] Install development tools"
-source ~/.bashrc
 
 info "[Devtools] Install Nodejs"
 nvm install node
