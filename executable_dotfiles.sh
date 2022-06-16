@@ -86,6 +86,9 @@ if ! is_installed nvm; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 fi
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
 # TODO: Install Yarn, Docker, etc.
 
 # Change shell to zsh
@@ -93,10 +96,6 @@ if ! [[ $(echo $SHELL) == *"zsh"* ]]; then
     info "[ZSH] Change shell to zsh"
     chsh -s "$(which zsh)"
 fi
-
-# source ~/.zshrc
-info "[ZSH] Reload zsh"
-source ~/.zshrc
 
 # Install development tools
 info "[Devtools] Install development tools"

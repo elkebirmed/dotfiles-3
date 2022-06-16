@@ -21,11 +21,11 @@
 #   for i in {0..255}; do print -Pn "%${i}F${(l:3::0:)i}%f " ${${(M)$((i%8)):#7}:+$'\n'}; done
 
 # Temporarily change options.
-# 'builtin' 'local' '-a' 'p10k_config_opts'
-# [[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
-# [[ ! -o 'sh_glob'         ]] || p10k_config_opts+=('sh_glob')
-# [[ ! -o 'no_brace_expand' ]] || p10k_config_opts+=('no_brace_expand')
-# 'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
+'builtin' 'local' '-a' 'p10k_config_opts'
+[[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
+[[ ! -o 'sh_glob'         ]] || p10k_config_opts+=('sh_glob')
+[[ ! -o 'no_brace_expand' ]] || p10k_config_opts+=('no_brace_expand')
+'builtin' 'setopt' 'no_aliases' 'no_sh_glob' 'brace_expand'
 
 () {
   emulate -L zsh
