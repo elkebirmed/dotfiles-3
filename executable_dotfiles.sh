@@ -69,10 +69,15 @@ setup_prompts() {
         exit 1
     }
 
-    # Install Starship
-    PACKAGE_NAME='Starship'
+    # Install Oh My Zsh
+    PACKAGE_NAME='Oh My Zsh'
     printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    curl -sS https://starship.rs/install.sh | sh
+    CHEZMOIPATH=$(chezmoi source-path)
+    rm -rf "$CHEZMOIPATH"/dot_oh-my-zsh/plugins
+    import_repo 'https://github.com/robbyrussell/oh-my-zsh/archive/master.tar.gz' "${HOME}/.oh-my-zsh" || {
+        error "import of ${PACKAGE_NAME} failed"
+        exit 1
+    }
 
     # Install Zsh plugins
     PACKAGE_NAME='zsh-autosuggestions'
@@ -85,6 +90,13 @@ setup_prompts() {
     PACKAGE_NAME='zsh-syntax-highlighting'
     printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
     import_repo 'https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz' "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" || {
+        error "import of ${PACKAGE_NAME} failed"
+        exit 1
+    }
+
+    PACKAGE_NAME='Powerlevel10k'
+    printf -- "%sInstalling/updating Zsh theme: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
+    import_repo 'https://github.com/romkatv/powerlevel10k/archive/master.tar.gz' "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" || {
         error "import of ${PACKAGE_NAME} failed"
         exit 1
     }
