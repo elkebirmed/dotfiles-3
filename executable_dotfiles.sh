@@ -94,8 +94,9 @@ if ! [[ $(echo $SHELL) == *"zsh"* ]]; then
     chsh -s "$(which zsh)"
 fi
 
-# reload shell
-exec "$(which zsh)" -l
+# source ~/.zshrc
+info "[ZSH] Reload zsh"
+source ~/.zshrc
 
 # Install development tools
 info "[Devtools] Install development tools"
