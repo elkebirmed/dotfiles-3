@@ -7,7 +7,7 @@
 ;   BREAKING CHANGE:
 ;   CLOSED ISSUES:
 
-; COMMIT GUIDELINES: Conventional Commits + AngularJS style -----------|
+; COMMIT GUIDELINES: Conventional Commits -----------|
 ; Types:
 ;   - chore: change the tools and libraries
 ;   - ci: change the build process
@@ -25,4 +25,3 @@
 ; Breaking changes: `!` after type/scope or `BREAKING CHANGE` in footer.
 ;
 ; See https://www.conventionalcommits.org/
-; See https://github.com/angular/angular.js/blob/master/DEVELOPERS.md

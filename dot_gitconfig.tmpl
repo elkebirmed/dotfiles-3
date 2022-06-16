@@ -20,19 +20,22 @@
     # Detect whitespace errors when applying a patch.
     whitespace = nowrap
 
-# [commit]
-#     # Specify template file for new commit messages.
-#     # template = ~/.gitmessage.txt
+[commit]
+    # Specify template file for new commit messages.
+    template = ~/.gitmessage.txt
 
-# [core]
+[core]
     # Disable line endings output conversion.
     autocrlf = input
 
+    # Use lf line endings.
+    eol = lf
+
     # Set comment character to something that allows mentioning issue numbers.
     commentChar = ";"
-
-#     # Store global exclusions into a custom file.
-#     # excludesfile = ~/.gitignore_global
+     
+    # Store global exclusions into a custom file.
+    excludesfile = ~/.gitignore_global
 
     # Make `git rebase` safer on macOS.
     # See http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/
@@ -41,6 +44,8 @@
     # Speed up commands involving untracked files such as `git status`.
     # See https://git-scm.com/docs/git-update-index#_untracked_cache
     untrackedCache = true
+
+    editor = nvim
 
 [diff]
     # List submodules commits in the range.
