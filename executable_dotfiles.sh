@@ -211,12 +211,6 @@ main() {
         vim \
         neovim \
         zsh
-    
-    # Check if user shell is not zsh
-    if [ "$SHELL" != "/bin/zsh" ]; then
-        printf -- "%sChanging shell to zsh...%s\n" "$BLUE" "$RESET"
-        chsh -s $(which zsh)
-    fi
 
     setup_dependencies
     setup_color
@@ -224,6 +218,12 @@ main() {
     setup_applications
     setup_devtools
     finalize_dotfiles
+
+    # Check if user shell is not zsh
+    if [ "$SHELL" != "/bin/zsh" ]; then
+        printf -- "%sChanging shell to zsh...%s\n" "$BLUE" "$RESET"
+        chsh -s $(which zsh)
+    fi
 
     printf -- "\n%sDone.%s\n\n" "$GREEN" "$RESET"
 
