@@ -213,6 +213,15 @@ main() {
         exit 1
     }
 
+    sudo apt update && sudo apt upgrade -y
+    sudo apt install -y \
+        git \
+        vim \
+        nvim \
+        zsh
+    
+    chsh -s $(which zsh)
+
     setup_dependencies
     setup_color
     setup_prompts
