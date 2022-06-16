@@ -21,7 +21,6 @@ $ColorWarn = "DarkRed"
 # Setup a pretty development-oriented PowerShell prompt.
 $modules = (
     "posh-git",
-    "oh-my-posh",
     "Terminal-Icons",
     "FastPing"
 )
@@ -30,9 +29,8 @@ $modules | ForEach-Object {
         Import-Module $_
     }
 }
-if (Get-Module -ListAvailable -Name "oh-my-posh") {
-    oh-my-posh init pwsh --config ~/.config/oh-my-posh/theme.omp.json | Invoke-Expression
-}
+
+Invoke-Expression (&starship init powershell)
 
 if (Get-Module -ListAvailable -Name "PSReadLine") {
     Set-PSReadLineOption -EditMode Emacs
@@ -128,7 +126,7 @@ $Env:RIPGREP_CONFIG_PATH = "$HOME/.ripgreprc"
 
 
 # Display if/which WSL Interop commands are imported.
-if ($WslImportedCommands) {
-    Write-Host "Windows Subsystem for Linux (WSL) Interop enable." -ForegroundColor $ColorInfo
-    Write-Host "WSL commands available:`n`t$($WslImportedCommands | Sort-Object)" -ForegroundColor $ColorInfo
-}
+# if ($WslImportedCommands) {
+#     Write-Host "Windows Subsystem for Linux (WSL) Interop enable." -ForegroundColor $ColorInfo
+#     Write-Host "WSL commands available:`n`t$($WslImportedCommands | Sort-Object)" -ForegroundColor $ColorInfo
+# }
