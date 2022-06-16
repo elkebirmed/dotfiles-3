@@ -84,10 +84,11 @@ fi
 if ! is_installed nvm; then
     info "[NVM] Install"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # TODO: Install Yarn, Docker, etc.
 
@@ -111,3 +112,5 @@ chezmoi apply
 cd ~
 
 info "Done ✔️"
+
+exec zsh
