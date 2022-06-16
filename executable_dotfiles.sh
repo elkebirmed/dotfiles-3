@@ -63,33 +63,63 @@ setup_prompts() {
 
     # Install Bash-it
     PACKAGE_NAME='Bash-it'
-    if [[ ! -d "$HOME/.bash_it" ]]; then
+    if [[ -d "$HOME/.bash_it" ]]; then
+        info "$PACKAGE_NAME already installed. Updating..."
+        (
+            cd "$HOME/.bash_it"
+            git pull --quiet
+        )
+    else
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
         ~/.bash_it/install.sh --silent --no-modify-config
     fi
 
     # Install Oh My Zsh
-    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    if [[ -d "$HOME/.oh-my-zsh" ]]; then
+        info "Oh My Zsh already installed. Updating..."
+        (
+            cd "$HOME/.oh-my-zsh"
+            git pull --quiet
+        )
+    else
         PACKAGE_NAME='Oh My Zsh'
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     fi
 
     # Install Zsh plugins
-    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]]; then
+    if [[ -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]]; then
+        info "Zsh-autosuggestions already installed. Updating..."
+        (
+            cd "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+            git pull --quiet
+        )
+    else
         PACKAGE_NAME='zsh-autosuggestions'
         printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     fi
 
-    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]]; then
+    if [[ -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]]; then
+        info "Zsh-syntax-highlighting already installed. Updating..."
+        (
+            cd "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+            git pull --quiet
+        )
+    else
         PACKAGE_NAME='zsh-syntax-highlighting'
         printf -- "%sInstalling/updating Zsh plugin: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
     fi
 
-    if [[ ! -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k" ]]; then
+    if [[ -d "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k" ]]; then
+        info "Powerlevel10k already installed. Updating..."
+        (
+            cd "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k"
+            git pull --quiet
+        )
+    else
         PACKAGE_NAME='Powerlevel10k'
         printf -- "%sInstalling/updating Zsh theme: %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -100,29 +130,17 @@ setup_applications() {
     printf -- "\n%sSetting up CLI applications:%s\n\n" "$BOLD" "$RESET"
 
     # Install Ultimate Vim Configuration
-    if [[ ! -d "${HOME}/.vim_runtime" ]]; then
+    if [[ -d "${HOME}/.vim_runtime" ]]; then
+        info "Ultimate Vim Configuration already installed. Updating..."
+        (
+            cd "${HOME}/.vim_runtime"
+            git pull --quiet
+        )
+    else
         PACKAGE_NAME='Ultimate vimrc'
         printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
         git clone --depth=1 https://github.com/amix/vimrc.git ${HOME}/.vim_runtime
     fi
-
-    # Install FZF
-    FZF_DIR="${HOME}/.fzf"
-    if command_exists fzf; then
-		info "[fzf] Already installed. Updating..."
-		(
-			cd "${FZF_DIR}"
-			git pull --quiet
-			./install --bin
-		)
-		return
-	fi
-
-	info "[fzf] Install"
-	if [[ ! -d "${FZF_DIR}" ]]; then
-		git clone --quiet --depth 1 https://github.com/junegunn/fzf.git "${FZF_DIR}"
-		"${FZF_DIR}/install" --no-bash --no-fish --key-bindings --completion --no-update-rc
-	fi
 }
 
 # shellcheck source=/dev/null
