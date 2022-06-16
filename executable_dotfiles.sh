@@ -84,7 +84,6 @@ fi
 if ! is_installed nvm; then
     info "[NVM] Install"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-    nvm install node
 fi
 
 # TODO: Install Yarn, Docker, etc.
@@ -100,6 +99,13 @@ if ! [[ $(echo $SHELL) == *"zsh"* ]]; then
     info "[ZSH] Change shell to zsh"
     chsh -s "$(which zsh)"
 fi
+
+# Install development tools
+info "[Devtools] Install development tools"
+exec zsh
+
+info "[Devtools] Install Nodejs"
+nvm install node
 
 # Apply dotfiles
 info "[Dotfiles] Apply dotfiles"
