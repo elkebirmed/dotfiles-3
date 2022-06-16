@@ -61,14 +61,6 @@ setup_dependencies() {
 setup_prompts() {
     printf -- "\n%sSetting up shell frameworks:%s\n\n" "$BOLD" "$RESET"
 
-    # Install Bash-it
-    PACKAGE_NAME='Bash-it'
-    printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
-    import_repo 'https://github.com/Bash-it/bash-it/archive/master.tar.gz' "${HOME}/.bash-it" || {
-        error "import of ${PACKAGE_NAME} failed"
-        exit 1
-    }
-
     # Install Oh My Zsh
     PACKAGE_NAME='Oh My Zsh'
     printf -- "%sInstalling/updating %s...%s\n" "$BLUE" "$PACKAGE_NAME" "$RESET"
