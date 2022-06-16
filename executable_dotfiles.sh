@@ -102,7 +102,7 @@ fi
 
 # Install development tools
 info "[Devtools] Install development tools"
-exec zsh
+source ~/.bashrc
 
 info "[Devtools] Install Nodejs"
 nvm install node
