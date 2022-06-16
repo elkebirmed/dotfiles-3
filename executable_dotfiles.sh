@@ -217,7 +217,7 @@ main() {
     sudo apt install -y \
         git \
         vim \
-        nvim \
+        neovim \
         zsh
     
     chsh -s $(which zsh)
